@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+   <context:component-scan base-package="com.lanou"/>
+
+    <bean id="dataSource"
+          class="com.mchange.v2.c3p0.ComboPooledDataSource">
+
+        <!--配置数据库的四大属性-->
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/0804Project"/>
+        <property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="user" value="root"/>
+        <property name="password" value="123456"/>
+
+    </bean>
+
+    <!--初始化sessionFactory对象-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+    </bean>
+
+
+
+
+    <!--创建Dao对象-->
+    <bean id="staffDao" class="com.lanou.hr.dao.impl.StaffDaoImpl">
+        <!--为继承来的sessionFactory赋值-->
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+
+    <bean id="departmentDao" class="com.lanou.hr.dao.impl.DepartmentDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="postDao" class="com.lanou.hr.dao.impl.PostDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!--创建Service对象-->
+
+    <bean id="staffService" class="com.lanou.hr.service.impl.StaffServiceImpl">
+        <property name="staffDao" ref="staffDao"/>
+    </bean>
+
+    <bean id="departmentService" class="com.lanou.hr.service.impl.DepartmentServiceImpl">
+        <property name="departmentDao" ref="departmentDao"/>
+    </bean>
+
+    <bean name="postService" class="com.lanou.hr.service.impl.PostServiceImpl">
+        <property name="postDao" ref="postDao"/>
+    </bean>
+
+
+
+
+
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <!--创建事务管理器对象-->
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+
+    <!--配置顾问(通知)-->
+    <tx:advice id="staffAdvisor" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--配置切面-->
+    <aop:config>
+        <!--声明切点-->
+        <aop:pointcut id="userPointCut" expression="execution(* com.lanou.hr.dao.impl.*.*(..))"/>
+        <aop:advisor advice-ref="staffAdvisor" pointcut-ref="userPointCut"/>
+    </aop:config>
+</beans>
