@@ -24,9 +24,9 @@
    
     <td width="57%"align="right">
     	<%--高级查询 --%>
-		<a href="javascript:void(0)" onclick="condition()"><img src="${pageContext.request.contextPath}/images/button/gaojichaxun.gif" /></a>
+		<a href="javascript:void(0)" onclick="document.forms[0].submit()"><img src="${pageContext.request.contextPath}/images/button/gaojichaxun.gif" /></a>
     	<%--员工注入 --%>
-	  	<a href="${pageContext.request.contextPath}/pages/staff/addStaff.jsp">
+	  	<a href="${pageContext.request.contextPath}/staffsFindDepartment.action">
 	  		<img src="${pageContext.request.contextPath}/images/button/tianjia.gif" />
 	  	</a>
       
@@ -35,16 +35,66 @@
   </tr>
 </table>
 
+ <script type="application/javascript">
+	 function onChange(value) {
+		 //输出value的值
+		 console.log(value);
+		 //根据value的值发送请求,获取二级列表的json数据
+		 var data = new FormData();
+		 data.append("depID", value);
+//		 data.append("postId",value);
+
+		 var xhr = new XMLHttpRequest();
+		 xhr.withCredentials = true;
+
+		 xhr.addEventListener("readystatechange", function () {
+			 if (this.readyState === 4) {
+				 console.log(this.responseText);
+				 //对请求回来的数据进行解析
+				 json = eval('(' + this.responseText + ')');
+
+				 //获取服务器的标签
+				 serverSelect = document.getElementById("post");
+				 //获取option标签
+				 optionEle = serverSelect.getElementsByTagName("option");
+				 //获取option的数量
+				 length = optionEle.length;
+				 //使用循环清空所有option标签
+				 for (var i = 0; i < length - 1; i++) {
+					 serverSelect.removeChild(optionEle[1]);
+				 }
+				 //将json数据插入到option中
+				 for (var i = 0; i < json.length; i++) {
+					 //创建一个option标签
+					 option = document.createElement("option");
+					 //设置value属性
+					 option.setAttribute("value", json[i].postId);
+					 //设置文本信息
+					 text = document.createTextNode(json[i].postName)
+					 //把文本信息添加到option标签中
+					 option.appendChild(text);
+					 //把option标签添加到servers标签中
+					 serverSelect.appendChild(option);
+				 }
+
+			 }
+		 });
+
+		 xhr.open("POST", "findPosts.action");
+		 xhr.send(data);
+	 }
+ </script>
+
 <!-- 查询条件：马上查询 -->
-<form depID="conditionFormId" action="${pageContext.request.contextPath}/staff/staffAction_findAll" method="post">
+<form  action="${pageContext.request.contextPath}/findAll.action" method="post">
 	<table width="88%" border="0" style="margin: 20px;" >
 	  <tr>
 	    <td width="80px">部门：</td>
 	    <td width="200px">
 	    	
-	    	<select name="crmPost.crmDepartment.depId" onchange="changePost(this)">
-				<s:iterator value="departmentList" var="dept">
+	    	<select id="department"  name="depID" onchange="onChange(this.value)">
 			    <option value="">--请选择部门--</option>
+				<s:iterator value="departmentList" var="dept">
 			    <option value="${dept.depID}">${dept.depName}</option>
 				</s:iterator>
 			</select>
@@ -53,16 +103,13 @@
 	    <td width="80px" >职务：</td>
 	    <td width="200px" >
 	    	
-	    	<select name="crmPost.postId" depID="postSelectId">
+	    	<select id="post" name="postId">
 			    <option value="">--请选择职务--</option>
-			    <option value="ee050687bd1a4455a153d7bbb7000003">总监</option>
-			    <option value="ee050687bd1a4455a153d7bbb7000004">讲师</option>
-			    <option value="ee050687bd1a4455a153d7bbb7000005">主管</option>
 			</select>
 
 	    </td>
 	    <td width="80px">姓名：</td>
-	    <td width="200px" ><input type="text" name="staffName" size="12" /></td>
+	    <td width="200px" ><input type="text" name="staffName" /></td>
 	    <td ></td>
 	  </tr>
 	</table>
@@ -85,31 +132,25 @@
     <td width="10%" align="center">编辑</td>
   </tr>
   
-    
-	  <tr class="tabtd1"> 
-	    <td align="center">管理员</td>
-	    <td align="center"></td>
-	    <td align="center"></td>
-	    <td align="center"></td>
-	    <td align="center"></td>
+    <s:iterator value="staffs" var="s">
+	  <tr class="tabtd1">
+	    <td align="center">${s.staffName}</td>
+	    <td align="center">${s.gender}</td>
+	    <td align="center">${s.onDutyDate}</td>
+	    <td align="center">${s.post.department.depName}</td>
+	    <td align="center">${s.post.postName}</td>
 	  	<td width="7%" align="center">
-	  		
-	  		<a href="${pageContext.request.contextPath}/pages/staff/editStaff.jsp"><img src="${pageContext.request.contextPath}/images/button/modify.gif" class="img" /></a>	
-	  	</td>
-	  	
-	  </tr>
-    
-	  <tr class="tabtd2"> 
-	    <td align="center">赵六</td>
-	    <td align="center">男</td>
-	    <td align="center">2012-02-12</td>
-	    <td align="center">咨询部</td>
-	    <td align="center">主管</td>
-	  	<td width="7%" align="center">
-	  		
-	  		<a href="${pageContext.request.contextPath}/pages/staff/editStaff.jsp"><img src="${pageContext.request.contextPath}/images/button/modify.gif" class="img" /></a>	
+	  		<a href="${pageContext.request.contextPath}/staffsFindDepartments.action?loginName=${s.loginName}
+													&loginPwd=${s.loginPwd}
+													&staffName=${s.staffName}
+													&gender=${s.gender}
+													&staffId=${s.staffId}
+													&postId=${s.post.postId}
+													&depID=${s.post.department.depID}">
+				<img src="${pageContext.request.contextPath}/images/button/modify.gif" class="img" /></a>
 	  	</td>
 	  </tr>
+	</s:iterator>
 </table>
 
 
@@ -128,5 +169,6 @@
   </tr>
 </table>
 --%>
+
 </body>
 </html>

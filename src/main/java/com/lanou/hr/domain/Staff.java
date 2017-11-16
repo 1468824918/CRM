@@ -18,6 +18,10 @@ public class Staff {
     public Staff() {
     }
 
+    public Staff(String staffName) {
+        this.staffName = staffName;
+    }
+
     public Staff(String staffId, String loginName, String loginPwd, String staffName, String gender, Date onDutyDate) {
         this.staffId = staffId;
         this.loginName = loginName;

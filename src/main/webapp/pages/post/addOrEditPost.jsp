@@ -1,4 +1,5 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="c" uri="/struts-tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -43,6 +44,12 @@
 		    <option value="">----请--选--择----</option>
             <s:iterator value="departmentList" var="p">
                 <option value="${p.depID}">${p.depName}</option>
+                <%--<s:if test="#p.depID==depID">--%>
+                    <%--<option value="${p.depID}" selected="selected">${p.depName}</option>--%>
+                <%--</s:if>--%>
+                <%--<s:else>--%>
+                    <%--<option value="${p.depID}">${p.depName}</option>--%>
+                <%--</s:else>--%>
             </s:iterator>
 		</select>
   </td>

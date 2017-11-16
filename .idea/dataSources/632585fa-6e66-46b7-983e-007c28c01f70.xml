@@ -74,19 +74,19 @@
     <column id="40" parent="27" name="onDutyDate">
       <data-type>datetime|0</data-type>
     </column>
-    <column id="41" parent="27" name="postID">
+    <column id="41" parent="27" name="postId">
       <data-type>varchar(255)|0</data-type>
     </column>
-    <index id="42" parent="27" name="FKaojavnc5u5ejnccr6khj5rc5j">
-      <columns>postID</columns>
+    <index id="42" parent="27" name="FKtrgxem3u7h6d33d9hpymksl01">
+      <columns>postId</columns>
       <desc-columns></desc-columns>
     </index>
     <key id="43" parent="27" name="PRIMARY">
       <columns>staffId</columns>
       <primary>1</primary>
     </key>
-    <foreign-key id="44" parent="27" name="FKaojavnc5u5ejnccr6khj5rc5j">
-      <columns>postID</columns>
+    <foreign-key id="44" parent="27" name="FKtrgxem3u7h6d33d9hpymksl01">
+      <columns>postId</columns>
       <ref-key>~.crm_post.PRIMARY</ref-key>
       <cascade-update-rule>restrict</cascade-update-rule>
       <cascade-delete-rule>restrict</cascade-delete-rule>

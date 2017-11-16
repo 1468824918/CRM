@@ -10,8 +10,8 @@
         <property name="postName"/>
         <set name="staffs"
              table="crm_staff"
-             inverse="true"
-             cascade="save-update">
+             lazy="false"
+             inverse="true">
             <key column="postId"/>
             <one-to-many class="Staff"/>
         </set>

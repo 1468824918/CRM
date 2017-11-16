@@ -21,7 +21,7 @@ public class PostDaoImpl extends HibernateDaoSupport implements PostDao{
      */
     @Override
     public void addSavePost(Post post) {
-        if (post.getPostId().equals("")){
+        if ("".equals(post.getPostId())){
             getHibernateTemplate().save(post);
         }else {
             getHibernateTemplate().saveOrUpdate(post);

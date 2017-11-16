@@ -10,7 +10,6 @@
         <property name="depName"/>
         <set name="posts"
              table="crm_post"
-             cascade="save-update"
              lazy="false"
              inverse="true">
             <key column="depID"/>

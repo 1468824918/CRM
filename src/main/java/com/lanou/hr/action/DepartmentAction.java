@@ -38,7 +38,7 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
      * @return
      */
     public String addOrEditPre(){
-        if (department.getDepName().equals("")){
+        if ("".equals(department.getDepName())){
             addActionError("部门不能为空");
             return ERROR;
         }else {

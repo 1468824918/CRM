@@ -16,9 +16,8 @@
         </property>
 
         <many-to-one name="post"
-                     column="postID"
+                     column="postId"
                      lazy="false"
-                     cascade="save-update"
                      class="Post"/>
     </class>
 </hibernate-mapping>

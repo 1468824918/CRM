@@ -67,6 +67,20 @@
 
 
 
+    <!--<bean id="departmentAction" class="com.lanou.hr.action.DepartmentAction">-->
+        <!--<property name="service" ref="departmentService"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="postAction" class="com.lanou.hr.action.PostAction">-->
+        <!--<property name="service" ref="postService"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="staffAction" class="com.lanou.hr.action.StaffAction">-->
+        <!--<property name="service" ref="staffService"/>-->
+    <!--</bean>-->
+
+
+
 
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate5.HibernateTransactionManager">

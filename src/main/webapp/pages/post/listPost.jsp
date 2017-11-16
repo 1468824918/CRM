@@ -54,7 +54,7 @@
             <td align="center">${p.department.depName}</td>
             <td align="center">${p.postName}</td>
             <td width="7%" align="center">
-                <a href="editPost.action?&postId=${p.postId}&postName=${p.postName}">
+                <a href="editPost.action?&postId=${p.postId}&postName=${p.postName}&depID=${p.department.depID}">
                <img src="${pageContext.request.contextPath}/images/button/modify.gif" class="img"/></a>
             </td>
         </tr>
